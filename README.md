@@ -1,5 +1,5 @@
 # ZipFunction
-Function to zip files from a blob Storage
+Function to zip files from a blob Storage. The initial purpose of this function is to use it as part of a Logic Apps flow. 
 
 Replace the parameter StorageAccountConnectionString for your own storage connection string from the Azure Blob Storage account
 
