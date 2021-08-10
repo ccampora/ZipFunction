@@ -61,12 +61,14 @@ namespace CompressAzureBlobStorageV2
             return containerClient;
         }
 
-        /*
-        * Creates a file in a blob storage container
-        * _name: File name
-        * _containerpath: path to the container
-        * _data: file content
-        */
+        /// <summary>
+        /// Creates a file in a blob storage container
+        /// </summary>
+        /// <param name="_name">File name</param>
+        /// <param name="_data"></param>
+        /// <param name="_containerpath">path to the container</param>
+        /// <param name="log"file content></param>
+        /// <returns></returns>
         private static async Task CreateBlob(string _name, string _data, string _containerpath, ILogger log)
         {
 
@@ -86,6 +88,13 @@ namespace CompressAzureBlobStorageV2
             return getBlobContainer(_containerpath).GetBlobClient(_name);
         }
 
+        /// <summary>
+        /// Create a .zip file containing all the files in blobFileNames
+        /// </summary>
+        /// <param name="zipblob">Instance to a BlobClient</param>
+        /// <param name="containerpath">the path to the container where the files are</param>
+        /// <param name="blobFileNames">A json array containing the list of files to add to the .zip file</param>
+        /// <returns></returns>
         public static async Task zipFiles(BlobClient zipblob, string containerpath, JArray blobFileNames)
         {
             var container = getBlobContainer(containerpath);
