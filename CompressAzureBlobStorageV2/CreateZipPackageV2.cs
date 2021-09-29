@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using ICSharpCode.SharpZipLib.Zip;
 using System.Text;
 using Newtonsoft.Json.Linq;
