@@ -117,6 +117,13 @@ namespace CompressAzureBlobStorageV2
                 zipOutputStream.SetLevel(0);
 
                 var blob = container.GetBlobClient(blobFileNameOrig);
+                
+                // skip Lenght 0 files
+                BlobProperties properties = await blob.GetPropertiesAsync();
+                if (properties.ContentLength <= 0)
+                {
+                    continue;
+                }
 
                 var entry = new ZipEntry(blobFileNameDest)
                 {
