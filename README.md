@@ -8,6 +8,7 @@ Create the parameter StorageAccountConnectionString for your own storage connect
 
 Input message example: 
 
+```
 {
   "containerpath": "container01", 
   "filelist": [
@@ -18,5 +19,6 @@ Input message example:
   ],
   "zipfilename": "in/zipFile/2021071156857-08585755930712445680477052973CU30.zip"
 }
+```
 
 the example above will take zip all the files listed in "filelist" array in a file name "zipfilename". It will also rename each of the files if specified. 
