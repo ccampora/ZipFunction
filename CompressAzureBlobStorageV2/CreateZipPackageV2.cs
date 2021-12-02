@@ -29,11 +29,40 @@ namespace CompressAzureBlobStorageV2
             string zipfilename;
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+
+            if (string.IsNullOrEmpty(requestBody))
+            {
+                return new BadRequestObjectResult("Body cannot be blank");
+            }
+
+            if(!ZipFunction.util.SchemaValidator.validateZipFileRequestBody(requestBody))
+            {
+                return new BadRequestObjectResult("Schema validation failed. A valid example is: \n" +
+                    ZipFunction.util.SchemaValidator.zipFileRequestBodyExample());
+            }
+
             dynamic data = JsonConvert.DeserializeObject(requestBody);
 
             containerpath = data?.containerpath;
+
+            if (string.IsNullOrEmpty(containerpath))
+            {
+                return new BadRequestObjectResult("containerpath value cannot be blank");
+            }
+
             zipfilename = data?.zipfilename;
+
+            if (string.IsNullOrEmpty(zipfilename))
+            {
+                return new BadRequestObjectResult("zipfilename value cannot be blank");
+            }
+
             JArray filelist = JArray.Parse(@data["filelist"].ToString());
+
+            if(filelist.Count == 0)
+            {
+                return new BadRequestObjectResult("filelist count needs to be major than 0");
+            }
 
             try
             {
@@ -54,6 +83,12 @@ namespace CompressAzureBlobStorageV2
         private static BlobContainerClient getBlobContainer(string _containerpath)
         {
             string connectionString = System.Environment.GetEnvironmentVariable("StorageAccountConnectionString");
+
+            if(string.IsNullOrEmpty(connectionString))
+            {
+                throw new Exception("StorageAccountConnectionString parameters is not configured");
+            }
+
 
             BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
 
