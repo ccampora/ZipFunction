@@ -1,0 +1,6 @@
+{
+  "extensions":[
+    { "name": "AzureStorageBlobs", "typeName":"Microsoft.Azure.WebJobs.Extensions.Storage.AzureStorageBlobsWebJobsStartup, Microsoft.Azure.WebJobs.Extensions.Storage.Blobs, Version=5.0.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8"},
+    { "name": "AzureStorageQueues", "typeName":"Microsoft.Azure.WebJobs.Extensions.Storage.AzureStorageQueuesWebJobsStartup, Microsoft.Azure.WebJobs.Extensions.Storage.Queues, Version=5.0.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8"}
+  ]
+}
