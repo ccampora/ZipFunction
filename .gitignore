@@ -3,4 +3,5 @@
 ################################################################################
 
 /CompressAzureBlobStorageV2/bin/Debug
-/local.settings.json
+/obj
+/.vs/ZipFunction/v17

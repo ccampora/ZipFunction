@@ -1,0 +1,8 @@
+{
+    "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "StorageAccountConnectionString": "DefaultEndpointsProtocol=https;AccountName=ccamporablobstorage;AccountKey=3nwxFdXoJBRxGLwiQMDG+b3aPvqqgc5P9JJe9KaVcZoFhtdbT2MyTj/D2gdivu0Tzn2K/kPrzFqjIFbdNhOvhg==;EndpointSuffix=core.windows.net"
+  }
+}
