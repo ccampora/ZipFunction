@@ -26,3 +26,5 @@ Input message example:
 ```
 
 the example above will take zip all the files listed in "filelist" array in a file name "zipfilename". It will also rename each of the files if specified. 
+
+Also, read this post: https://ccampora.blogspot.com/2021/12/creating-dmf-data-package-from-files.html
