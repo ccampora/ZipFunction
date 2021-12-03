@@ -1,3 +1,7 @@
+# Deploy to Azure
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fccampora%2FZipFunction%2Fmain%2Fdeployment%2Fdeploytoazure.json" target="_blank"><img src="https://azuredeploy.net/deploybutton.png"/></a>
+
 # ZipFunction
 Function to zip files from a blob Storage. The initial purpose of this function is to use it as part of a Logic Apps flow. 
 

@@ -6,3 +6,6 @@
 /obj
 /.vs/ZipFunction/v17
 /bin/Debug/netcoreapp3.1
+/local.settings.json
+/obj
+/bin
