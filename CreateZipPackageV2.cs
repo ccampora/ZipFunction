@@ -66,8 +66,8 @@ namespace CompressAzureBlobStorageV2
 
             try
             {
-                await CreateBlob(zipfilename, "", containerpath, log);
-                zipblob = getBlob(zipfilename, containerpath, log);
+                await ZipFunction.util.BlobUtil.CreateBlob(zipfilename, "", containerpath, log);
+                zipblob = ZipFunction.util.BlobUtil.getBlob(zipfilename, containerpath, log);
                 await zipFiles(zipblob, containerpath, filelist);
 
                 return new OkObjectResult("");
@@ -80,50 +80,6 @@ namespace CompressAzureBlobStorageV2
         }
 
 
-        private static BlobContainerClient getBlobContainer(string _containerpath)
-        {
-            string connectionString = System.Environment.GetEnvironmentVariable("StorageAccountConnectionString");
-
-            if(string.IsNullOrEmpty(connectionString))
-            {
-                throw new Exception("StorageAccountConnectionString parameters is not configured");
-            }
-
-
-            BlobServiceClient blobServiceClient = new BlobServiceClient(connectionString);
-
-            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(_containerpath);
-
-            return containerClient;
-        }
-
-        /// <summary>
-        /// Creates a file in a blob storage container
-        /// </summary>
-        /// <param name="_name">File name</param>
-        /// <param name="_data"></param>
-        /// <param name="_containerpath">path to the container</param>
-        /// <param name="log"file content></param>
-        /// <returns></returns>
-        private static async Task CreateBlob(string _name, string _data, string _containerpath, ILogger log)
-        {
-
-            BlobContainerClient container;
-            BlobClient blob;
-
-            container = getBlobContainer(_containerpath);
-
-            await container.CreateIfNotExistsAsync();
-
-            blob = container.GetBlobClient(_name);
-
-        }
-
-        private static BlobClient getBlob(string _name, string _containerpath, ILogger log)
-        {
-            return getBlobContainer(_containerpath).GetBlobClient(_name);
-        }
-
         /// <summary>
         /// Create a .zip file containing all the files in blobFileNames
         /// </summary>
@@ -133,7 +89,7 @@ namespace CompressAzureBlobStorageV2
         /// <returns></returns>
         public static async Task zipFiles(BlobClient zipblob, string containerpath, JArray blobFileNames)
         {
-            var container = getBlobContainer(containerpath);
+            var container = ZipFunction.util.BlobUtil.getBlobContainer(containerpath);
 
             MemoryStream tmpzipstream = new MemoryStream();
 
