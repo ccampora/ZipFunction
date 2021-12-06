@@ -10,9 +10,8 @@ using Newtonsoft.Json;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using ICSharpCode.SharpZipLib.Zip;
-using System.Text;
 using Newtonsoft.Json.Linq;
-using System.Net;
+using ZipFunction.util;
 
 namespace CompressAzureBlobStorageV2
 {
@@ -27,6 +26,7 @@ namespace CompressAzureBlobStorageV2
             BlobClient zipblob;
             string containerpath;
             string zipfilename;
+            bool validatezip;
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
@@ -35,10 +35,10 @@ namespace CompressAzureBlobStorageV2
                 return new BadRequestObjectResult("Body cannot be blank");
             }
 
-            if(!ZipFunction.util.SchemaValidator.validateZipFileRequestBody(requestBody))
+            if(!SchemaValidator.validateZipFileRequestBody(requestBody))
             {
                 return new BadRequestObjectResult("Schema validation failed. A valid example is: \n" +
-                    ZipFunction.util.SchemaValidator.zipFileRequestBodyExample());
+                    SchemaValidator.zipFileRequestBodyExample());
             }
 
             dynamic data = JsonConvert.DeserializeObject(requestBody);
@@ -57,6 +57,8 @@ namespace CompressAzureBlobStorageV2
                 return new BadRequestObjectResult("zipfilename value cannot be blank");
             }
 
+            validatezip = data?.validatezip;
+
             JArray filelist = JArray.Parse(@data["filelist"].ToString());
 
             if(filelist.Count == 0)
@@ -66,10 +68,21 @@ namespace CompressAzureBlobStorageV2
 
             try
             {
-                await ZipFunction.util.BlobUtil.CreateBlob(zipfilename, "", containerpath, log);
-                zipblob = ZipFunction.util.BlobUtil.getBlob(zipfilename, containerpath, log);
+                await BlobUtil.CreateBlob(zipfilename, "", containerpath, log);
+                zipblob = BlobUtil.getBlob(zipfilename, containerpath, log);
                 await zipFiles(zipblob, containerpath, filelist);
 
+                if(validatezip)
+                {
+                    if(await PackageChecker.validatePackageAsync(containerpath, zipfilename))
+                    {
+                        return new OkObjectResult("");
+                    }
+                    else
+                    {
+                        return new BadRequestObjectResult("The zip package did not contain any data file");
+                    }
+                }
                 return new OkObjectResult("");
 
             }
@@ -89,7 +102,7 @@ namespace CompressAzureBlobStorageV2
         /// <returns></returns>
         public static async Task zipFiles(BlobClient zipblob, string containerpath, JArray blobFileNames)
         {
-            var container = ZipFunction.util.BlobUtil.getBlobContainer(containerpath);
+            var container = BlobUtil.getBlobContainer(containerpath);
 
             MemoryStream tmpzipstream = new MemoryStream();
 
@@ -132,11 +145,8 @@ namespace CompressAzureBlobStorageV2
 
             tmpzipstream.Seek(0, SeekOrigin.Begin);
             await zipblob.UploadAsync(tmpzipstream);
-
             
             zipOutputStream.Close();
-
-
         }
 
 
